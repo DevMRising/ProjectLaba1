@@ -3,11 +3,14 @@
 namespace app\DTO;
 
 
-class ServerInfoDTO{
-    public function __construct(
-        public string $phpVersion
-    )
-    {}
+readonly class ServerInfoDTO{
+    public string $phpVersion;
+    public string $timeZone;
+    public function __construct()
+    {
+        $this->phpVersion = phpversion();
+        $this->timeZone = $_ENV['APP_TIMEZONE'];
+    }
     
 };
 
