@@ -6,6 +6,8 @@ use App\Http\Controllers\InfoController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/info/server',  [InfoController::class,'server'  ]);
-Route::get('/info/client',  [InfoController::class,'client'  ]);
-Route::get('/info/database',[InfoController::class,'database']);
+Route::prefix('info')->group(function() {
+    Route::get('/server',[InfoController::class,'server']);
+    Route::get('/client',[InfoController::class,'client']);
+    Route::get('/database',[InfoController::class,'database']);
+});

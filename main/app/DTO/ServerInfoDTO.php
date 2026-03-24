@@ -2,7 +2,6 @@
 
 namespace app\DTO;
 
-
 readonly class ServerInfoDTO{
     public string $phpVersion;
     public string $timeZone;
