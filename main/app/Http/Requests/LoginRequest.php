@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Closure;
 class LoginRequest extends FormRequest
 {
     /**
@@ -11,7 +11,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,22 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'username' => [
+                'required',
+                'string',
+                'min:7',
+                'alpha:ascii',
+                'regex:/[A-Z]/'
+                ],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[0-9]/',
+                'regex:/[!@#$%^&*(),.?":{}|<>]/',
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/'
+            ],
         ];
     }
 }
