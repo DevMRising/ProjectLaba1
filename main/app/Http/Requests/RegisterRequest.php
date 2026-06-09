@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon;
 
 class RegisterRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,11 +26,15 @@ class RegisterRequest extends FormRequest
             'username' => [
                 'required',
                 'string',
-                'min:7',
-                'alpha:ascii',
-                'regex:/[A-Z]/',
-                'unique:users'
-                ],
+                'regex:/^[A-Z][A-Za-z]{6,}$/',
+                'unique:users,name',
+            ],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'unique:users,email',
+            ],
             'password' => [
                 'required',
                 'string',
@@ -37,8 +42,23 @@ class RegisterRequest extends FormRequest
                 'regex:/[0-9]/',
                 'regex:/[!@#$%^&*(),.?":{}|<>]/',
                 'regex:/[A-Z]/',
-                'regex:/[a-z]/'
+                'regex:/[a-z]/',
+            ],
+            'c_password' => [
+                'required',
+                'same:password',
+            ],
+            'birthday' => [
+                'required',
+                'date',
+                'date_format:Y-m-d',
+                'before_or_equal:' . Carbon::now()->subYears(14)->format('Y-m-d'),
             ],
         ];
+    }
+
+    public function toDTO(): \App\DTO\UserDTO
+    {
+        return new \App\DTO\UserDTO($this);
     }
 }

@@ -25,10 +25,8 @@ class LoginRequest extends FormRequest
             'username' => [
                 'required',
                 'string',
-                'min:7',
-                'alpha:ascii',
-                'regex:/[A-Z]/'
-                ],
+                'regex:/^[A-Z][A-Za-z]{6,}$/',
+            ],
             'password' => [
                 'required',
                 'string',
@@ -39,5 +37,10 @@ class LoginRequest extends FormRequest
                 'regex:/[a-z]/'
             ],
         ];
+    }
+
+    public function toDTO(): \App\DTO\UserDTO
+    {
+        return new \App\DTO\UserDTO($this);
     }
 }
