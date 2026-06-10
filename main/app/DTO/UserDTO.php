@@ -3,6 +3,7 @@
 namespace App\DTO;
 
 use Illuminate\Http\Request;
+use App\DTO\RoleDTO;
 
 readonly class UserDTO
 {
@@ -12,6 +13,7 @@ readonly class UserDTO
     public ?string $password;
     public ?string $c_password;
     public ?string $birthday;
+    public ?array $roles;
 
     public function __construct(Request|array|null $data = null)
     {
@@ -22,6 +24,12 @@ readonly class UserDTO
             $this->password = $data->input('password', null);
             $this->c_password = $data->input('c_password', null);
             $this->birthday = $data->input('birthday', null);
+            $roles = $data->input('roles', null);
+            if (is_array($roles)) {
+                $this->roles = array_map(fn($r) => new RoleDTO($r), $roles);
+            } else {
+                $this->roles = null;
+            }
             return;
         }
 
@@ -32,6 +40,11 @@ readonly class UserDTO
         $this->password = $arr['password'] ?? null;
         $this->c_password = $arr['c_password'] ?? null;
         $this->birthday = $arr['birthday'] ?? null;
+        if (!empty($arr['roles']) && is_array($arr['roles'])) {
+            $this->roles = array_map(fn($r) => new RoleDTO($r), $arr['roles']);
+        } else {
+            $this->roles = null;
+        }
     }
 
     public function toArray(): array
@@ -43,6 +56,7 @@ readonly class UserDTO
             'password' => $this->password,
             'c_password' => $this->c_password,
             'birthday' => $this->birthday,
+            'roles' => $this->roles ? array_map(fn(RoleDTO $r) => $r->toArray(), $this->roles) : null,
         ];
     }
 }
