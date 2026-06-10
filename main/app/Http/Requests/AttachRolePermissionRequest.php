@@ -25,7 +25,8 @@ class AttachRolePermissionRequest extends FormRequest
                 'integer',
                 'exists:permissions,id',
                 Rule::unique('permission_role')->where(function ($query) {
-                    return $query->where('role_id', $this->input('role_id'))
+                    return $query->whereNull('deleted_at')
+                                 ->where('role_id', $this->input('role_id'))
                                  ->where('permission_id', $this->input('permission_id'));
                 }),
             ],

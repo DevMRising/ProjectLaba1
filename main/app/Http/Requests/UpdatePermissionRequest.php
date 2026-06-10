@@ -14,7 +14,8 @@ class UpdatePermissionRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('permission') ?? $this->route('id');
+        $routePermission = $this->route('permission');
+        $id = $routePermission instanceof \App\Models\Permission ? $routePermission->id : $routePermission;
 
         return [
             'name' => [

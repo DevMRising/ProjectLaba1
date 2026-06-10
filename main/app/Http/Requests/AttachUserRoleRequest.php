@@ -25,7 +25,8 @@ class AttachUserRoleRequest extends FormRequest
                 'integer',
                 'exists:roles,id',
                 Rule::unique('role_user')->where(function ($query) {
-                    return $query->where('user_id', $this->input('user_id'))
+                    return $query->whereNull('deleted_at')
+                                 ->where('user_id', $this->input('user_id'))
                                  ->where('role_id', $this->input('role_id'));
                 }),
             ],
